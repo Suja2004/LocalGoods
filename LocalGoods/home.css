@@ -1,0 +1,111 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style-type: none;
+    outline: none;
+    font-family: "Baloo Da 2", sans-serif;
+}
+
+html {
+    font-size: 75%;
+}
+.p-1 {
+    font-size: 2.5rem;
+    margin-right: 1rem;
+    position: relative;
+    z-index: 10;
+}
+.p-2 {
+    font-size: 2.5rem;
+    color: #27a7e2;
+    position: absolute;
+    top: 0.4rem;
+    left: 0.5rem;
+}
+.logo {
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 800;
+    color: #15d64f;
+    cursor: pointer;
+}
+/* nav bar */
+.navbar{
+    position: fixed;
+    padding: 10px 0px;
+    font-size: 1.3rem;
+    z-index: 100;
+    width: 100%;
+    display: flex;
+}
+.navbar .left{
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.navbar .right{
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.navbar a{
+    color: #27a7e2;
+}
+.navbar input{
+    padding: .2rem;
+    border-radius: .6rem;
+}
+/* container */
+.home-container{
+    width: 100%;
+    padding: 0 3rem;
+}
+/* home page */
+.home-page-content{
+    padding-top: 4rem; 
+}
+.title{
+    color: #45738b;
+    width: 100%;
+    padding:5rem ;
+    justify-content: left;
+    border: .2rem;
+    border-radius: 1rem;
+}
+.home-title{
+    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+
+}
+.contents{
+    padding-top: 4rem;
+    color: #45738b;
+}
+/* product page */
+.product-page-content{
+    padding-top: 4rem; 
+    display: none;
+}
+.product-title{
+    background-image: linear-gradient(to top, #9be15d 0%, #00e3ae 100%);
+}
+.buttons{
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-evenly;
+}
+.buttons button{
+    color: #45738b;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem ;
+    padding: 1rem 0;
+    border: none;
+    border-radius: .5rem;
+    background-image: linear-gradient(-225deg, #DFFFCD 0%, #90F9C4 48%, #39F3BB 100%);
+}
