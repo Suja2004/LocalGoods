@@ -11,6 +11,17 @@
 html {
     font-size: 62.5%;
 }
+/* logo */
+
+.logo button {
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 800;
+    color: #15d64f;
+    cursor: pointer;
+    border: none;
+    background: #fff;
+}
 
 body {
     background-color: #f5f5f5;
@@ -67,12 +78,21 @@ a {
     border: 0.1rem solid #777;
     border-radius: 0.5rem;
 }
-
+#admin{
+    display: none;
+}
+.forgot{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
 /* Buttons */
 .form-login-btn {
-    background-color: #3703b1;
+    background-color: #15d64f;
     color: #fff;
-    border: 0.1rem solid #036bb1;
+    border: 0.1rem solid #2ae47e;
     font-size: 1.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -82,8 +102,8 @@ a {
 
 .form-login-btn:hover,
 .form-signup-btn:hover {
-    background-color: #036bb1;
-    border-color: #4e03b1;
+    background-color: #2ae47e;
+    border-color: #15d64f;
 }
 
 .form-signup-btn {
@@ -175,9 +195,9 @@ a {
 
 
 .signup-btn {
-    background-color: #3703b1;
+    background-color: #15d64f;
     color: #fff;
-    border: 0.1rem solid #036bb1;
+    border: 0.1rem solid #2ae47e;
     font-size: 1.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -185,8 +205,8 @@ a {
 }
 
 .signup-btn:hover {
-    background-color: #036bb1;
-    border-color: #4e03b1;
+    background-color: #2ae47e;
+    border-color: #15d64f;
 }
 
 .signup-page-form span {
@@ -277,9 +297,9 @@ a {
 }
 
 .form-password-btn {
-    background-color: #3703b1;
+    background-color: #15d64f;
     color: #fff;
-    border: 0.1rem solid #036bb1;
+    border: 0.1rem solid #2ae47e;
     font-size: 1.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -288,44 +308,11 @@ a {
 
 
 .form-password-btn:hover {
-    background-color: #036bb1;
-    border-color: #4e03b1;
+    background-color: #2ae47e;
+    border-color: #15d64f;
 }
 
 /*End of Change Password page */
-
-/* OTP form */
-
-.otp-page {
-    width: 100%;
-    display: flex;
-}
-
-.otp-page-form input {
-    width: 50%;
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 1.2rem;
-    border-radius: 0.5rem;
-    font-size: 1.6rem;
-    border: 0.1rem solid #ccc;
-}
-
-.otp-send-btn {
-    background-color: #3703b1;
-    color: #fff;
-    border: 0.1rem solid #036bb1;
-    font-size: 1.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.otp-send-btn:hover {
-    background-color: #036bb1;
-    border-color: #4e03b1;
-}
-
-/* End of OTP form */
 /* Profile-page */
 .profile-page {
     width: 100%;
@@ -385,9 +372,9 @@ textarea {
 }
 
 .btn {
-    background-color: #3703b1;
+    background-color: #15d64f;
     color: #fff;
-    border: 0.1rem solid #036bb1;
+    border: 0.1rem solid #2ae47e;
     font-size: 1.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -396,8 +383,8 @@ textarea {
 
 
 .btn:hover {
-    background-color: #036bb1;
-    border-color: #4e03b1;
+    background-color: #2ae47e;
+    border-color: #15d64f;
 }
 
 /* Profile Page End */

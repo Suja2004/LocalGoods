@@ -11,16 +11,23 @@
 <body>
     <!-- Login page -->
     <div class="login-page">
+        <div class="navbar-logo logo">
+            <button id="admin-page" class="logo-text">Local Goods</button>
+        </div>
         <div class="login-page-content">
             <form class="login-page-form" action="login.php" method="POST">
                 <input type="text" class="form-login-input" placeholder=" Email " name="email" required>
                 <input type="password" class="form-login-input" placeholder="Password" name="password" required>
-                <input type="submit" class="form-login-btn" value="Log In">
-                <a href="changepassword.php" class="form-login-link">Forgot Password?</a>
+                <input type="hidden" id="btnType" name="btnType" value="user">
+                <input type="submit" name="user" class="form-login-btn" id="user" value="Log In">
+                <input type="submit" name="admin" class="form-login-btn" id="admin" value="Admin Log In">
+                <div class="forgot" id="forgot">
+                <a href="changepassword.php" class="form-login-link" >Forgot Password?</a>
                 <span>or</span>
+            </div>
             </form>
-            
-            <button class="form-signup-btn signup" onclick="location.href='signup.php';">Sign Up</button>
+
+            <button id="forgot2"  class="form-signup-btn signup" onclick="location.href='signup.php';">Sign Up</button>
 
         </div>
     </div>
@@ -34,18 +41,54 @@
 
 </body>
 <script>
-    
-function showPopup(message) {
-    const Popup = document.getElementById("popup");
-    const Message = document.getElementById("popup-message");
+    const adminPage = document.getElementById('admin-page');
+    const user = document.getElementById('user');
+    const admin = document.getElementById('admin');
+    const forgot = document.getElementById('forgot');
+    const forgot2 = document.getElementById('forgot2');
+    const btnType = document.getElementById('btnType');
+    let clickCount = 0;
+    const clickDelay = 500;
 
-    Message.textContent = message;
-    Popup.style.display = "flex";
-}
+    adminPage.addEventListener('click', () => {
+        clickCount++;
+        setTimeout(() => {
+            if (clickCount === 3) {
+                user.style.display = 'none';
+                forgot.style.display = 'none';
+                forgot2.style.display = 'none';
+                admin.style.display = 'block';
+                btnType.value = 'admin';
+            } else if (clickCount === 2) {
+                user.style.display = 'block';
+                forgot.style.display = 'flex';
+                forgot2.style.display = 'block';
+                admin.style.display = 'none';
+                btnType.value = 'user';
+            }
+            clickCount = 0; // Reset click count
+        }, clickDelay);
+    });
 
-function hidePopup() {
-    document.getElementById("popup").style.display = "none";
-}
+    user.addEventListener('click', () => {
+        btnType.value = 'user';
+    });
+
+    admin.addEventListener('click', () => {
+        btnType.value = 'admin';
+    });
+
+    function showPopup(message) {
+        const Popup = document.getElementById("popup");
+        const Message = document.getElementById("popup-message");
+
+        Message.textContent = message;
+        Popup.style.display = "flex";
+    }
+
+    function hidePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
 </script>
 
 </html>

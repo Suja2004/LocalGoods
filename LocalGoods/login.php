@@ -8,15 +8,16 @@ if (isset($_SESSION["email"])) {
 }
 
 include_once 'dbcon.php';
-include_once 'index.php';
+include_once 'index.html';
 
 // Get input values
 $email = $_POST['email'];
 $password = $_POST['password'];
+$userType = $_POST['btnType'];
 
 // Validate inputs
 if (empty($email) || empty($password)) {
-    header("location: index.php?w=Invalid input");
+    header("location: index.html;?w=Invalid input");
     exit;
 }
 
@@ -24,10 +25,15 @@ if (empty($email) || empty($password)) {
 $email = $con->real_escape_string($email);
 
 // Construct the SQL query using prepared statement
-$stmt = $con->prepare("SELECT username, password FROM users WHERE email = ?");
+if ($userType === 'admin') {
+    $stmt = $con->prepare("SELECT username, password FROM admins WHERE email = ?");
+} else {
+    $stmt = $con->prepare("SELECT username, password FROM users WHERE email = ?");
+}
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
+
 
 if ($result->num_rows === 1) {
     $row = $result->fetch_assoc();
@@ -39,12 +45,17 @@ if ($result->num_rows === 1) {
         session_regenerate_id(true);
         $_SESSION["username"] = $username;
         $_SESSION["email"] = $email; 
-        header("location: home.php");
+        
+        if ($userType === 'admin') {
+            header("location: admin_page.php");
+        } else {
+            header("location: home.php");
+        }
         exit;
-    } 
+    }
 } 
-    echo "<script>
-        showPopup('Wrong Email or Password');
-        </script>";
 
+echo "<script>
+    alert('Wrong Email or Password');
+</script>";
 ?>

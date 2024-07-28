@@ -2,10 +2,10 @@
 session_start();
 
 // Check if the user is logged in
-// if (!isset($_SESSION['email'])) {
-//     header("Location: index.html"); 
-//     exit();
-// }
+if (!isset($_SESSION['email'])) {
+    header("Location: index.html"); 
+    exit();
+}
 
 // Include the database connection file
 include_once 'dbcon.php';
