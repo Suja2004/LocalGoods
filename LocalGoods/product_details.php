@@ -1,5 +1,7 @@
 <?php
 include_once 'dbcon.php';
+
+
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +38,8 @@ include_once 'dbcon.php';
 
                     </div>
                     <div class="icons">
-                        <a href="#" class="cart-link"><i class="fas fa-box"></i></a>
+                        <a href="cart.php" class="cart-link">
+                            <i class="fas fa-box"></i></a>
                         <a href="#" class="profile-link" onclick="toggleMenu()"><i class="fas fa-user"></i>
                         </a>
                     </div>
@@ -80,27 +83,28 @@ include_once 'dbcon.php';
 
                     if ($product) {
                 ?>
-                        <div class="image-container">
-                            <img src="uploaded_img/<?php echo htmlspecialchars($product['product_image']); ?>" alt="">
-                        </div>
-                        <hr>
                         <div class="product-details">
-                            <div class="pname">
-                                <h1><?php echo htmlspecialchars($product['product_name']); ?></h1>
-                                <p class="price">₹ <?php echo htmlspecialchars($product['price']); ?></p>
-                                <p class="rating">
+                            <div class="image-container">
+                                <img src="uploaded_img/<?php echo htmlspecialchars($product['product_image']); ?>" alt="">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">
+                                    <h1><?php echo htmlspecialchars($product['product_name']); ?></h1>
+                                </div>
+                                <p class="product-price">₹ <?php echo htmlspecialchars($product['price']); ?></p>
+                                <p class="product-rating">
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star"></i>
                                 </p>
-                                <div class="btn">
-                                    <button>Add to Cart</button>
+                                <div class="product-buttons">
+                                    <button onclick="addToCart(<?php echo $product['product_id']; ?>)">Add to Cart</button>
                                 </div>
-                                <div class="cat">
-                                    <p class="category"><strong>Category:</strong> <?php echo htmlspecialchars($product['product_category']); ?></p>
-                                    <p class="tags"><strong>Tags:</strong> <?php echo htmlspecialchars($product['product_tags']); ?></p>
+                                <div class="product-category">
+                                    <p><strong>Category:</strong> <?php echo htmlspecialchars($product['product_category']); ?></p>
+                                    <p><strong>Tags:</strong> <?php echo htmlspecialchars($product['product_tags']); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -115,8 +119,23 @@ include_once 'dbcon.php';
                 }
                 ?>
             </div>
+
         </div>
     </div>
+    <script>
+        function addToCart(productId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "add_to_cart.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert("Product added to cart successfully!");
+                }
+            };
+            xhr.send("product_id=" + productId);
+        }
+    </script>
+
 </body>
 <script src="script.js"></script>
 

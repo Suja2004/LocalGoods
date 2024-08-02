@@ -27,7 +27,7 @@ $result = null;
 
 if ($user_id) {
     $stmt = $con->prepare("
-        SELECT cart.cart_id, cart.user_id, cart.product_id, products.product_name, cart.quantity
+        SELECT cart.cart_id, cart.user_id, cart.product_id, products.product_name,products.price, cart.quantity
         FROM cart 
         JOIN users ON cart.user_id = users.id
         JOIN products ON cart.product_id = products.product_id
@@ -38,6 +38,7 @@ if ($user_id) {
 
     $stmt->close();
 }
+
 
 ?>
 
@@ -71,11 +72,11 @@ if ($user_id) {
                 </div>
                 <div class="right">
                     <div class="searchbar">
-                        <input type="text" name="searchitem" placeholder="Search for Product">
-
+                    <input type="text" id="searchInput" placeholder="Search for Product">
+                    <div id="suggestions" class="suggestions-container"></div>
                     </div>
                     <div class="icons">
-                        <a href="#" class="cart-link" onclick="toggleCart()"><i class="fas fa-box"></i></a>
+                        <a href="cart.php" class="cart-link" ><i class="fas fa-box"></i></a>
                         <a href="#" class="profile-link" onclick="toggleMenu()"><i class="fas fa-user"></i>
                         </a>
                     </div>
@@ -144,9 +145,6 @@ if ($user_id) {
                 </div>
 
                 <div id="product-page" class="product-page-content">
-                    <div class="product-title title">
-                        <h1>All Products</h1>
-                    </div>
                     <div class="contents">
                         <h1>Product Categories</h1>
                         <div class="buttons">
@@ -194,65 +192,7 @@ if ($user_id) {
                         ?>
                     </div>
                 </div>
-                <div class="cart-page" id="cart">
-                    <h1>Your Cart </h1>
-                    <?php
-                    $subtotal = 0;
-                    $salesTaxRate = 0.10;
-                    $grandTotal = 0;
-
-                    if ($result->num_rows > 0) {
-                    ?>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                while ($row = $result->fetch_assoc()) {
-                                    $total = $row['price'] * $row['quantity'];
-                                    $subtotal += $total;
-                                ?>
-                                    <tr>
-                                        <td>
-                                            <p><?php echo $row['product_name'] ?></p>
-                                        </td>
-                                        <td>₹ <?php echo $row['price'] ?></td>
-                                        <td><input type="number" value="<?php echo $row['quantity'] ?>" name="quantity[]"></td>
-                                        <td>₹ <?php echo $total ?></td>
-                                    </tr>
-                                <?php
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-
-                        <?php
-                        $salesTax = $subtotal * $salesTaxRate;
-                        $grandTotal = $subtotal + $salesTax;
-                        ?>
-
-                        <div class="summary">
-                            <p>Subtotal: ₹ <?php echo $subtotal ?></p>
-                            <p>Sales Tax: ₹ <?php echo $salesTax ?></p>
-                            <p>Grand total: ₹ <?php echo $grandTotal ?></p>
-                            <button>Check out</button>
-                        </div>
-                    <?php
-                    } else {
-                    ?>
-                        <h2>Add Items to Cart</h2>
-                    <?php
-                    }
-                    ?>
-
-                </div>
-
+                
             </div>
         </div>
     </div>
@@ -300,6 +240,40 @@ if ($user_id) {
                 }
             });
         }
+        
+        document.getElementById('searchInput').addEventListener('input', function() {
+    let query = this.value;
+    if (query.length > 1) { 
+        fetchSuggestions(query);
+    } else {
+        document.getElementById('suggestions').innerHTML = '';
+    }
+});
+
+document.getElementById('searchInput').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        window.location.href = 'search_results.php?search=' + encodeURIComponent(this.value);
+    }
+});
+
+function fetchSuggestions(query) {
+    fetch('search_suggestions.php?q=' + encodeURIComponent(query))
+        .then(response => response.json())
+        .then(data => {
+            let suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = '';
+            data.forEach(item => {
+                let div = document.createElement('div');
+                div.textContent = item.product_name;
+                div.addEventListener('click', () => {
+                    window.location.href = 'search_results.php?search=' + encodeURIComponent(item.product_name);
+                });
+                suggestions.appendChild(div);
+            });
+        });
+}
+
+
     </script>
 </body>
 <script src="script.js"></script>
