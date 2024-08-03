@@ -22,54 +22,10 @@ include_once 'dbcon.php';
         <div class="navbar-logo logo">
             <span class="p-1">L</span>
             <span class="p-2">G</span>
-            <span class="logo-text">Local Goods</span>
+            <span class="logo-text" onclick="window.history.back()">Local Goods</span>
         </div>
         <div class="shop-page">
-            <nav class="navbar">
-                <div class="left">
-                    <a href="home.php">Home</a>
-                    <a href="home.php?show=products">Products</a>
-                    <a href="#" id="home">Help</a>
-                    <a href="#" id="home">Contact</a>
-                </div>
-                <div class="right">
-                    <div class="searchbar">
-                        <input type="text" name="searchitem" placeholder="Search for Product">
-
-                    </div>
-                    <div class="icons">
-                        <a href="cart.php" class="cart-link">
-                            <i class="fas fa-box"></i></a>
-                        <a href="#" class="profile-link" onclick="toggleMenu()"><i class="fas fa-user"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </nav>
-            <div class="sub-menu-container " id="subMenu">
-                <div class="sub-menu">
-                    <a href="#" class="sub-menu-link">
-                        <p>Account</p>
-                        <span>></span>
-                    </a>
-                    <a href="#" class="sub-menu-link">
-                        <p>My Orders</p>
-                        <span>></span>
-                    </a>
-                    <a href="changepassword.php" class="sub-menu-link">
-                        <p>Change Password</p>
-                        <span>></span>
-                    </a>
-                    <a href="#" class="sub-menu-link">
-                        <p>Settings</p>
-                        <span>></span>
-                    </a>
-                    <a href="#" class="sub-menu-link">
-                        <p>Logout</p>
-                        <span>></span>
-                    </a>
-                </div>
-            </div>
+            
             <div class="container">
                 <?php
                 if (isset($_GET['id'])) {

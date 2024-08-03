@@ -31,20 +31,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->store_result();
 
     if ($stmt->num_rows > 0) {
-        // Update userdata
         $stmt->close();
         $stmt = $con->prepare("UPDATE userdata SET full_name = ?, phone_number = ?, date_of_birth = ?, address = ? WHERE user_id = ?");
         $stmt->bind_param('ssssi', $full_name, $phone_number, $date_of_birth, $address, $user_id);
         $stmt->execute();
     } else {
-        // Insert userdata
         $stmt->close();
         $stmt = $con->prepare("INSERT INTO userdata (user_id, full_name, email, phone_number, date_of_birth, address) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param('isssss', $user_id, $full_name, $email, $phone_number, $date_of_birth, $address);
         $stmt->execute();
     }
     $stmt->close();
-    header("Location: profile.php");
+    header("Location: home.php");
     exit();
 } else {
     echo "Invalid request.";

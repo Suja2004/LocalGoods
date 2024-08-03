@@ -39,8 +39,8 @@ $stmt->close();
                 <div class="left">
                     <a href="home.php">Home</a>
                     <a href="home.php?show=products">Products</a>
-                    <a href="#" id="home">Help</a>
-                    <a href="#" id="home">Contact</a>
+                    <a href="home.php?show=help" id="home">Help</a>
+                    <a href="home.php?show=contact" id="home">Contact</a>
                 </div>
                 <div class="right">
                     <div class="searchbar">

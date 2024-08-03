@@ -18,16 +18,13 @@ $stmt->bind_result($user_id);
 $stmt->fetch();
 $stmt->close();
 
-// Initialize variables
 $result = null;
 $subtotal = 0;
 $salesTaxRate = 0.001;
 $grandTotal = 0;
 
-// Handle form submissions for update or delete
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['update'])) {
-        // Update cart item quantity
         $cart_id = $_POST['update'];
         $quantity = $_POST['quantity'][$cart_id];
 
@@ -50,13 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // if (isset($_POST['checkout'])) {
-    //     // header("Location: order.php");
-    //     exit();
-    // }
+    if (isset($_POST['checkout'])) {
+        header("Location: order.php");
+        exit();
+    }
 }
 
-// Fetch cart items for the user
 if ($user_id) {
     $stmt = $con->prepare("
         SELECT cart.cart_id, cart.user_id, cart.product_id, products.product_name, products.price, cart.quantity
@@ -73,25 +69,28 @@ if ($user_id) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
     <link rel="stylesheet" href="home.css">
     <script>
-    function confirmDelete() {
-        return confirm("Are you sure you want to delete this item?");
-    }
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this item?");
+        }
     </script>
 </head>
+
 <body>
     <div class="home-container">
         <div class="cart-page" id="cart">
-            <div class="btn">
-                <button onclick="goBack()">Back</button>
+            <div class="cartTop">
+                <button class="back" onclick="goBack()" aria-label="Go back">&lt;</button>
                 <h1>Your Cart</h1>
             </div>
-            <?php if ($result && $result->num_rows > 0): ?>
+
+            <?php if ($result && $result->num_rows > 0) : ?>
                 <form action="cart.php" method="post">
                     <table>
                         <thead>
@@ -119,8 +118,10 @@ if ($user_id) {
                                     </td>
                                     <td>₹ <?php echo htmlspecialchars($total); ?></td>
                                     <td>
-                                        <button type="submit" name="update" value="<?php echo $row['cart_id']; ?>">Update</button>
-                                        <button type="submit" name="delete" value="<?php echo $row['cart_id']; ?>" onclick="return confirmDelete()">Delete</button>
+                                        <div class="actions">
+                                            <button class="acbtn green" type="submit" name="update" value="<?php echo $row['cart_id']; ?>">Update</button>
+                                            <button class="acbtn red" type="submit" name="delete" value="<?php echo $row['cart_id']; ?>" onclick="return confirmDelete()">Delete</button>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php
@@ -130,7 +131,7 @@ if ($user_id) {
                     </table>
 
                     <?php
-                    $salesTax = $subtotal * $salesTaxRate;
+                    $salesTax = floor($subtotal * $salesTaxRate * 100 / 100);
                     $grandTotal = $subtotal + $salesTax;
                     ?>
 
@@ -138,19 +139,22 @@ if ($user_id) {
                         <p>Subtotal: ₹ <?php echo $subtotal; ?></p>
                         <p>Sales Tax: ₹ <?php echo $salesTax; ?></p>
                         <p>Grand Total: ₹ <?php echo $grandTotal; ?></p>
-                        <button type="submit" name="checkout">Check out</button>
+                        <button class="checkout" type="submit" name="checkout">Check out</button>
                     </div>
                 </form>
-            <?php else: ?>
+            <?php else : ?>
                 <h2>Add Items to Cart</h2>
             <?php endif; ?>
         </div>
     </div>
+
+
     <script>
-    function goBack() {
-        window.history.back();
-    }
+        function goBack() {
+            window.history.back();
+        }
     </script>
 </body>
 <script src="script.js"></script>
+
 </html>

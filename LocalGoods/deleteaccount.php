@@ -6,7 +6,7 @@ include_once("dbcon.php");
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['email']) || empty($_POST['email'])) {
         
-        header("Location:profile.php");
+        header("Location:index.html");
         exit;
     }
 

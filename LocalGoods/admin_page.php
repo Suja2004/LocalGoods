@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+
+if (!isset($_SESSION['email'])) {
+   header("Location: index.html");
+   exit();
+}
+
 include_once 'dbcon.php';
 
 if (isset($_POST['add_product'])) {
@@ -41,7 +48,121 @@ if (isset($_GET['delete'])) {
          </script>';
 }
 
+
+if (isset($_GET['deletemail'])) {
+   $id = intval($_GET['deletemail']);
+   $stmt = $con->prepare("DELETE FROM contact_form WHERE id = ?");
+   $stmt->bind_param("i", $id);
+   if ($stmt->execute()) {
+      header("Location: admin_page.php");
+      exit;
+   }
+   $stmt->close();
+}
+
+
+$sql = "SELECT id, name, email, subject, message, created_at FROM contact_form ORDER BY created_at DESC";
+$result = $con->query($sql);
+
+if (isset($_POST['respond'])) {
+   $id = intval($_POST['id']);
+   $replySubject = $_POST['reply_subject'];
+   $replyMessage = $_POST['reply_message'];
+
+   $stmt = $con->prepare("SELECT email FROM contact_form WHERE id = ?");
+   $stmt->bind_param("i", $id);
+   $stmt->execute();
+   $stmt->bind_result($email);
+   $stmt->fetch();
+   $stmt->close();
+
+   if ($email) {
+      $to = $email;
+      $subject = $replySubject;
+      $message = $replyMessage;
+      $headers = "From: no-reply@yourdomain.com\r\n";
+
+      if (mail($to, $subject, $message, $headers)) {
+         echo "<p>Email sent successfully!</p>";
+      } else {
+         echo "<p>Failed to send email.</p>";
+      }
+   }
+
+   header("Location:admin_page.php");
+   exit;
+}
+
+if (isset($_POST['send_response'])) {
+   $order_id = intval($_POST['order_id']);
+   $response_message = $_POST['response_message'];
+   $arrival_date = $_POST['arrival_date'];
+
+   $stmt = $con->prepare("SELECT email FROM users INNER JOIN orders ON users.id = orders.user_id WHERE orders.id = ?");
+   $stmt->bind_param("i", $order_id);
+   $stmt->execute();
+   $stmt->bind_result($customer_email);
+   $stmt->fetch();
+   $stmt->close();
+
+   if ($customer_email) {
+      $to = $customer_email;
+      $subject = "Order Update";
+      $message = "Your order will arrive on " . $arrival_date . ". " . $response_message;
+      $headers = "From: no-reply@yourdomain.com\r\n";
+
+      if (mail($to, $subject, $message, $headers)) {
+         echo "<p>Email sent successfully!</p>";
+      } else {
+         echo "<p>Failed to send email.</p>";
+      }
+   }
+
+   header("Location: admin_page.php?show=orders");
+   exit;
+}
+$sql_orders = "SELECT 
+                    orders.id, 
+                    users.username, 
+                    users.email, 
+                    orders.address, 
+                    orders.phone, 
+                    orders.grand_total, 
+                    orders.order_date 
+               FROM 
+                    orders
+               INNER JOIN 
+                    users ON orders.user_id = users.id
+               ORDER BY 
+                    orders.order_date";
+$orderresult = $con->query($sql_orders);
+
+$sql_order_items = "SELECT order_items.order_id, 
+                    order_items.quantity, 
+                    products.product_name
+                    FROM order_items
+                    INNER JOIN products ON order_items.product_id = products.product_id";
+$orderItemsResult = $con->query($sql_order_items);
+
+$orderItems = [];
+$quantities = [];
+
+while ($item = $orderItemsResult->fetch_assoc()) {
+   $order_id = $item['order_id'];
+   if (!isset($orderItems[$order_id])) {
+      $orderItems[$order_id] = [];
+      $quantities[$order_id] = [];
+   }
+   $orderItems[$order_id][] = $item['product_name'];
+   $quantities[$order_id][] = $item['quantity'];
+}
+
+
+
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +173,6 @@ if (isset($_GET['delete'])) {
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Admin Panel</title>
 
-   <!-- Font Awesome CDN link -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
    <link rel="stylesheet" href="adminstyle.css">
@@ -60,7 +180,7 @@ if (isset($_GET['delete'])) {
 
 <body>
 
-<?php
+   <?php
    if (isset($message)) {
       foreach ($message as $msg) {
          echo '<span class="message">' . $msg . '</span>';
@@ -75,20 +195,23 @@ if (isset($_GET['delete'])) {
             }, 2000); // Redirect after 3 seconds
          </script>';
    }
-?>
+   ?>
 
    <div class="container">
       <div class="navbar-logo logo">
          <span class="p-1">L</span>
          <span class="p-2">G</span>
-         <span class="logo-text">Local Goods</span>
+         <span class="logo-text" onclick="return confirmLogout();">Local Goods</span>
+
+
+
       </div>
       <nav class="navbar">
          <div class="option">
             <a href="#" id="home">Home</a>
             <a href="#product-page" id="product">Products</a>
-            <a href="#" id="help">Help</a>
-            <a href="#" id="contact">Contact</a>
+            <a href="#orders-page" id="orders">Orders</a>
+            <a href="#messages-page" id="messages">Messages</a>
          </div>
       </nav>
       <div class="admin-product-form-container">
@@ -157,35 +280,163 @@ if (isset($_GET['delete'])) {
             </table>
          </div>
       </div>
+   </div>
+   <div class="messages" id="messages-page">
+      <header class="header">
+         <h1>Emails from Contact Form</h1>
+      </header>
 
+      <main class="main-content">
+         <table class="email-table">
+            <thead>
+               <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Message</th>
+                  <th>Received At</th>
+                  <th>Actions</th>
+               </tr>
+            </thead>
+            <tbody>
+               <?php
+               if ($result->num_rows > 0) {
+                  while ($row = $result->fetch_assoc()) {
+                     $email = htmlspecialchars($row['email']);
+                     $subject = htmlspecialchars($row['subject']);
+                     $message = htmlspecialchars($row['message']);
+                     $id = htmlspecialchars($row['id']);
+                     $created_at = htmlspecialchars($row['created_at']);
+
+                     echo "<tr>";
+                     echo "<td>$id</td>";
+                     echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                     echo "<td>$email</td>";
+                     echo "<td>$subject</td>";
+                     echo "<td>" . nl2br($message) . "</td>";
+                     echo "<td>$created_at</td>";
+                     echo '<td>
+                            <button class="btn respond-btn" onclick="showResponseForm(' . $id . ', \'' . $email . '\', \'' . addslashes($subject) . '\')">Respond</button>
+
+                            <a href="?deletemail=' . $id . '" class="btn delete-btn" onclick="return confirm(\'Are you sure you want to delete this record?\')">Delete</a>
+                        </td>';
+                     echo "</tr>";
+                  }
+               } else {
+                  echo "<tr><td colspan='7'>No records found</td></tr>";
+               }
+
+               $con->close();
+               ?>
+            </tbody>
+         </table>
+      </main>
+      <div id="response-form" class="response-form">
+         <h2>Respond to Email</h2>
+         <form action="admin_page.php" method="POST">
+            <input type="hidden" name="id" id="response-id">
+            <label for="reply_subject">Subject:</label>
+            <input type="text" name="reply_subject" id="reply_subject" required>
+            <label for="reply_message">Message:</label>
+            <textarea name="reply_message" id="reply_message" required></textarea>
+            <button type="submit" name="respond">Send Response</button>
+            <button type="button" onclick="hideResponseForm()">Cancel</button>
+         </form>
+      </div>
+   </div>
+   <div id="orders-page" class="orders-page">
+      <header class="header">
+         <h1>Orders</h1>
+      </header>
+
+      <main class="main-content">
+         <table class="orders-table">
+            <thead>
+               <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Order Date</th>
+                  <th>Actions</th>
+               </tr>
+            </thead>
+            <tbody>
+               <?php
+               while ($order = $orderresult->fetch_assoc()) {
+                  $order_id = htmlspecialchars($order['id']);
+                  $customer_name = htmlspecialchars($order['username']);
+                  $address = htmlspecialchars($order['address']);
+                  $phone = htmlspecialchars($order['phone']);
+                  $grand_total = htmlspecialchars($order['grand_total']);
+                  $order_date = htmlspecialchars($order['order_date']);
+                  $email = htmlspecialchars($order['email']);
+
+                  echo "<tr>";
+                  echo "<td>$order_id</td>";
+                  echo "<td>$customer_name</td>";
+                  echo "<td>$address</td>";
+                  echo "<td>$phone</td>";
+
+
+                  $product_list = [];
+                  $quantity_list = [];
+
+                  // Check if there are products for this order
+                  if (isset($orderItems[$order_id])) {
+                     foreach ($orderItems[$order_id] as $index => $product_name) {
+                        $quantity = isset($quantities[$order_id][$index]) ? $quantities[$order_id][$index] : 0;
+                        $product_list[] = htmlspecialchars($product_name) ;
+                     }
+                     $product_list = implode("<br>", $product_list);
+                  } else {
+                     $product_list = "No products found";
+                  }
+
+                  echo "<td>$product_list</td>";
+                  echo "<td>$quantity</td>";
+
+                  echo "<td>$grand_total</td>";
+                  echo "<td>$order_date</td>";
+                  echo '<td>
+                          <button class="btn respond-btn" onclick="showResponseorderForm(' . $order_id . ', \'' . $email . '\')">Respond</button>
+                          
+                      </td>';
+                  echo "</tr>";
+               }
+               ?>
+            </tbody>
+         </table>
+      </main>
    </div>
 
-</body>
-<script>
-   const home = document.getElementById('home');
-   const homepage = document.getElementById('home-page');
-   const product = document.getElementById('product');
-   const productpage = document.getElementById('product-page');
 
-   home.addEventListener('click', () => {
-       homepage.style.display = 'block';
-       productpage.style.display = 'none';
-   });
-   
-   product.addEventListener('click', () => {
-       homepage.style.display = 'none';
-       productpage.style.display = 'block';
-   });
-
-   document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const showParam = urlParams.get('show');
-
-      if (showParam === 'products') {
-         homepage.style.display = 'none';
-         productpage.style.display = 'block';
+   <div id="order-response-form" class="response-form" style="display: none;">
+      <h2>Respond to Order</h2>
+      <form action="admin_page.php" method="POST">
+         <input type="text" name="order_id" id="response-order-id" readonly>
+         <label for="arrival_date">Expected Arrival Date:</label>
+         <input type="date" name="arrival_date" id="arrival_date" required>
+         <label for="response_message">Message:</label>
+         <textarea name="response_message" id="response_message" required></textarea>
+         <button type="submit" name="send_response">Send Response</button>
+         <button type="button" onclick="hideResponseorderForm()">Cancel</button>
+      </form>
+   </div>
+   <script>
+      function confirmLogout() {
+         if (confirm('Are you sure you want to Logout?')) {
+            window.location.href = 'logout.php';
+         }
+         return false;
       }
-   });
+   </script>
+</body>
+<script src="admin.js">
 </script>
 
 </html>

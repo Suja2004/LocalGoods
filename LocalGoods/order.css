@@ -1,0 +1,160 @@
+.sliding-section {
+    position: fixed;
+    top: 3rem;
+    right: -100%;
+    width: 500px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.sliding-content {
+    padding: 20px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    color: #333;
+    float: right;
+}
+
+.sliding-section.open {
+    right: 0; 
+}
+
+.link {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+/* Table Styles */
+.sliding-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.sliding-content table th, .sliding-content table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.sliding-content table th {
+    background-color: #f4f4f4;
+}
+
+.cancel-btn {
+    background-color: #f44336;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.cancel-btn:hover {
+    background-color: #d32f2f;
+}
+.sliding-content h2{
+    color: #45738b;
+}
+
+.sliding-content p{
+    font-size: 2rem;
+    text-align: center;
+}
+
+/* settings */
+
+.header {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+}
+
+.header-title {
+    margin: 0;
+}
+
+.main-content {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.settings-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section-title {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.form-label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.form-input, .form-select, .form-checkbox {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-select {
+    width: auto;
+}
+
+.form-checkbox {
+    width: auto;
+    margin-right: 10px;
+}
+
+.form-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-button:hover {
+    background-color: #45a049;
+}
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-text {
+    margin: 0;
+}

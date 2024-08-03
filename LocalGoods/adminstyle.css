@@ -166,7 +166,100 @@ th {
    margin: 20px;
 }
 td {
-   /* height: 90%; */
    font-size: 1.6rem;
    border-bottom: var(--border);
+}
+/* orders */
+.orders-page{
+   width: 100%;
+   display: none;
+}
+
+
+/* messages */
+.messages{
+   width: 100%;
+   display: none;
+}
+.main-content{
+   width: 100%;
+   padding: 0 2rem;
+}
+.email-table,.orders-table{
+   text-align: center;
+   width: 100%;
+}
+.respond-btn {
+   background-color: #007bff;
+}
+
+.respond-btn:hover {
+   background-color: #0056b3;
+}
+
+.delete-btn {
+   background-color: #dc3545;
+}
+
+.delete-btn:hover {
+   background-color: #c82333;
+}
+.response-form {
+   width: 500px;
+   height: 350px;
+   display: none;
+   position: fixed;
+   top: 20%;
+   left: 50%;
+   transform: translate(-50%, -20%);
+   padding: 1rem;
+   background: #fff;
+   border: 1px solid #ddd;
+   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   z-index: 1000;
+   font-size: 1.2rem;
+}
+
+.response-form form {
+   display: flex;
+   flex-direction: column;
+   padding: 20px;
+}
+
+.response-form label {
+   margin-bottom: 0.5rem;
+}
+
+.response-form input[type="text"],
+.response-form textarea {
+   margin-bottom: 1rem;
+   padding: 0.5rem;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+}
+
+.response-form button {
+   padding: 0.5rem;
+   border: none;
+   border-radius: 4px;
+   color: #fff;
+   cursor: pointer;
+   margin-right: 0.5rem;
+   margin-block: 1rem;
+}
+
+.response-form button[type="submit"] {
+   background-color: #007bff;
+}
+
+.response-form button[type="button"] {
+   background-color: #6c757d;
+}
+
+.response-form button[type="submit"]:hover {
+   background-color: #0056b3;
+}
+
+.response-form button[type="button"]:hover {
+   background-color: #5a6268;
 }
