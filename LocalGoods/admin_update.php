@@ -50,7 +50,7 @@ if (isset($_POST['update_product'])) {
       }
       $redirectUrl = "admin_page.php";
       if (isset($_GET['edit'])) {
-         $redirectUrl .= "?show=products";
+         $redirectUrl .= "?show=product";
       }
       echo '<script type="text/javascript">
             setTimeout(function(){
@@ -61,9 +61,7 @@ if (isset($_POST['update_product'])) {
 ?>
 
     <div class="container update-form">
-
         <div class="admin-product-form-container centered">
-
             <?php
 
             $select = mysqli_query($con, "SELECT * FROM products WHERE product_id = '$id'");
@@ -73,9 +71,9 @@ if (isset($_POST['update_product'])) {
 
                 <form action="" method="post" enctype="multipart/form-data">
                     <h3 class="title">update the product</h3>
-                    <input type="text" class="box" name="product_name" value="<?php echo $row['product_name']; ?>" placeholder="enter the product name">
+                    <input type="text" class="box" name="product_name" value="<?php echo $row['product_name']; ?>" placeholder="enter the product name" required>
 
-                    <input type="number" min="0" class="box" name="product_price" value="<?php echo $row['price']; ?>" placeholder="enter the product price">
+                    <input type="number" min="0" class="box" name="product_price" value="<?php echo $row['price']; ?>" placeholder="enter the product price" required>
 
                     <?php
                     $selected = $row['product_category'];
@@ -91,26 +89,16 @@ if (isset($_POST['update_product'])) {
                     echo '</select>';
                     ?>
 
-                    <input type="file" class="box" name="product_image" accept="image/png, image/jpeg, image/jpg">
+                    <input type="file" class="box" name="product_image" accept="image/png, image/jpeg, image/jpg" required>
 
-                    <input type="text" class="box" name="product_desc" value="<?php echo $row['product_desc']; ?>" placeholder="enter the product description">
+                    <input type="text" class="box" name="product_desc" value="<?php echo $row['product_desc']; ?>" placeholder="enter the product description" required>
 
-                    <?php
-                    $selected = $row['product_tags'];
-                    $options = array('Tags', 'Trending', 'New', 'Top Seller', 'Daily');
-                    echo "<select name='tags' class='box'>";
-                    foreach ($options as $option) {
-                        if ($selected == $option) {
-                            echo "<option selected='selected' value='$option'>$option</option>";
-                        } else {
-                            echo "<option value='$option'>$option</option>";
-                        }
-                    }
-                    echo '</select>';
-                    ?>
+                    <input type="text" class="box" name="tags" value="<?php echo $row['product_tags']; ?>" placeholder="enter the product tags" required>
+
 
                     <input type="submit" value="update product" name="update_product" class="btn">
-                    <a href="admin_page.php?show=products" class="btn">go back!</a>
+
+                    <a href="admin_page.php?show=product" class="btn">go back!</a>
                 </form>
 
             <?php } ?>

@@ -3,15 +3,28 @@ session_start();
 
 include_once 'dbcon.php';
 
-// Get search query from URL
 $search = $_GET['search'] ?? '';
-
-// Sanitize input
 $search_query = '%' . $search . '%';
 
-// Fetch products based on search query
-$stmt = $con->prepare("SELECT * FROM products WHERE product_name LIKE ?");
-$stmt->bind_param("s", $search_query);
+$price_min = $_GET['price_min'] ?? 0;
+$price_max = $_GET['price_max'] ?? 1000;
+$sort_by = $_GET['sort_by'] ?? 'product_name';
+$order = $_GET['order'] ?? 'asc';
+
+$sql = "SELECT * FROM products 
+        WHERE (product_name LIKE ? OR product_tags LIKE ? OR product_category LIKE ?) 
+        AND price BETWEEN ? AND ?";
+
+if ($sort_by === 'name') {
+    $sql .= " ORDER BY product_name " . $order;
+} elseif ($sort_by === 'price') {
+    $sql .= " ORDER BY price " . $order;
+}
+
+$stmt = $con->prepare($sql);
+
+$stmt->bind_param("sssii", $search_query, $search_query, $search_query, $price_min, $price_max);
+
 $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
@@ -45,14 +58,41 @@ $stmt->close();
                 <div class="right">
                     <div class="searchbar">
                         <input type="text" id="searchInput" placeholder="Search for Product" value="<?php echo htmlspecialchars($search); ?>">
+                        <button id="filterBtn">Filter</button>
                         <div id="suggestions" class="suggestions-container"></div>
-                    </div>
-                    <div class="icons">
-                        <a href="#" class="cart-link"><i class="fas fa-box"></i></a>
-                        <a href="#" class="profile-link" onclick="toggleMenu()"><i class="fas fa-user"></i></a>
                     </div>
                 </div>
             </nav>
+            <div id="filterSection" class="filter-section">
+                <h3>Filter Products</h3>
+                <form action="search_results.php" method="GET">
+                    <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+                    
+                    <label for="priceRange">Price Range:</label>
+                    <div class="slider-container">
+                        <input type="range" id="priceMin" name="price_min" min="0" max="1000" value="<?php echo htmlspecialchars($price_min); ?>">
+                        <input type="range" id="priceMax" name="price_max" min="0" max="1000" value="<?php echo htmlspecialchars($price_max); ?>">
+                        <div class="slider-values">
+                            <span id="priceMinValue"><?php echo htmlspecialchars($price_min); ?></span> - <span id="priceMaxValue"><?php echo htmlspecialchars($price_max); ?></span>
+                        </div>
+                    </div>
+                    
+                    <label for="sortBy">Sort By:</label>
+                    <select id="sortBy" name="sort_by">
+                        <option value="name" <?php echo ($sort_by === 'name') ? 'selected' : ''; ?>>Name</option>
+                        <option value="price" <?php echo ($sort_by === 'price') ? 'selected' : ''; ?>>Price</option>
+                    </select>
+
+                    <label for="order">Order:</label>
+                    <div class="order-buttons">
+                        <button type="submit" name="order" value="asc" class="<?php echo ($order === 'asc') ? 'active' : ''; ?>">Ascending</button>
+                        <button type="submit" name="order" value="desc" class="<?php echo ($order === 'desc') ? 'active' : ''; ?>">Descending</button>
+                    </div>
+                    
+                    <button type="submit">Apply Filters</button>
+                </form>
+                <button id="closeFilter">Close</button>
+            </div>
             <div class="search-container">
                 <?php if ($result->num_rows > 0) : ?>
                     <div class="search-results">
@@ -99,6 +139,14 @@ $stmt->close();
                     }
                 });
 
+                document.getElementById('filterBtn').addEventListener('click', function() {
+                    document.getElementById('filterSection').classList.add('active');
+                });
+
+                document.getElementById('closeFilter').addEventListener('click', function() {
+                    document.getElementById('filterSection').classList.remove('active');
+                });
+
                 function fetchSuggestions(query) {
                     fetch('search_suggestions.php?q=' + encodeURIComponent(query))
                         .then(response => response.json())
@@ -115,8 +163,27 @@ $stmt->close();
                             });
                         });
                 }
+
+                // Slider functionality
+                const priceMin = document.getElementById('priceMin');
+                const priceMax = document.getElementById('priceMax');
+                const priceMinValue = document.getElementById('priceMinValue');
+                const priceMaxValue = document.getElementById('priceMaxValue');
+
+                priceMin.addEventListener('input', () => {
+                    priceMinValue.textContent = priceMin.value;
+                });
+
+                priceMax.addEventListener('input', () => {
+                    priceMaxValue.textContent = priceMax.value;
+                });
+
+                priceMinValue.textContent = priceMin.value;
+                priceMaxValue.textContent = priceMax.value;
             </script>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
-<script src="script.js"></script>
 
 </html>

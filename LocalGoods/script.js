@@ -157,7 +157,7 @@ $(document).ready(function () {
 
     document.getElementById('searchInput').addEventListener('input', function () {
         let query = this.value;
-        if (query.length > 1) {
+        if (query.length >= 1) {
             fetchSuggestions(query);
         } else {
             document.getElementById('suggestions').innerHTML = '';

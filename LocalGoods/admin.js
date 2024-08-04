@@ -39,9 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const showParam = urlParams.get('show');
 
-    if (showParam === 'orders') {
+    if (showParam === 'product') {
         homepage.style.display = 'none';
-        orderspage.style.display = 'block';
+        productpage.style.display = 'block';
     }
 });
 

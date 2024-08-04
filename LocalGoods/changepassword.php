@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Change Password page -->
     <div class="change-password-page">
         <div class="return">
             <a href="index.html" class="arrow">&larr;</a>

@@ -76,7 +76,8 @@ html {
    color: #15d64f;
    cursor: pointer;
 }
-.container{
+
+.container {
    margin-top: 40px;
 }
 
@@ -96,6 +97,40 @@ html {
    width: 100%;
    display: flex;
    justify-content: space-evenly;
+}
+
+.searchsort {
+   position: fixed;
+   display: flex;
+   font-size: 1.2rem;
+   width: 600px;
+   justify-content: space-evenly;
+}
+
+.searchsort input{
+   border: 1px solid #7e868d;
+   padding-block: 1rem;
+   border-radius: 1rem;
+   text-align: center;
+}
+
+.sort select{
+   text-align: center;
+}
+
+.fbtn {
+   width: 100px;
+   padding: 1rem;
+   background: #27a7e2;
+
+   border-radius: 1rem;
+}
+.tbtn{
+   width: 40px;
+   padding-block: 1rem;
+   background: #27a7e2;
+   border-radius: 1rem;
+
 }
 
 .admin-product-form-container .centered {
@@ -132,6 +167,7 @@ html {
 }
 
 .product-display .product-display-table {
+   margin-top: 7rem;
    width: 100%;
    text-align: center;
 }
@@ -148,9 +184,11 @@ html {
 .product-display .product-display-table .btn:last-child:hover {
    background: var(--black);
 }
-.outer-wrapper{
+
+.outer-wrapper {
    display: none;
 }
+
 
 th {
    background-color: var(--bg-color);
@@ -161,34 +199,40 @@ th {
 }
 
 .table-wrapper {
-   max-height: 500px;
+   max-height: 550px;
    overflow: scroll;
    margin: 20px;
 }
+
 td {
    font-size: 1.6rem;
    border-bottom: var(--border);
 }
+
 /* orders */
-.orders-page{
+.orders-page {
    width: 100%;
    display: none;
 }
 
 
 /* messages */
-.messages{
+.messages {
    width: 100%;
    display: none;
 }
-.main-content{
+
+.main-content {
    width: 100%;
    padding: 0 2rem;
 }
-.email-table,.orders-table{
+
+.email-table,
+.orders-table {
    text-align: center;
    width: 100%;
 }
+
 .respond-btn {
    background-color: #007bff;
 }
@@ -204,6 +248,7 @@ td {
 .delete-btn:hover {
    background-color: #c82333;
 }
+
 .response-form {
    width: 500px;
    height: 350px;

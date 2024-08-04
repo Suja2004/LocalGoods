@@ -2,6 +2,7 @@
 include_once 'dbcon.php';
 include_once 'changepassword.php';
 session_start();
+$email=$_POST["email"];
 if ($stmt = $con->prepare("SELECT id FROM users WHERE email = ?")) {
     $stmt->bind_param('s', $email);
     $stmt->execute();

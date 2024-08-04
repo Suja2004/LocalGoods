@@ -99,10 +99,10 @@ $stmt->close();
 
 <body>
     <div class="home-page">
-        <div class="navbar-logo logo"  >
+        <div class="navbar-logo logo">
             <span class="p-1">L</span>
             <span class="p-2">G</span>
-            <span  class="logo-text" onclick="window.history.back()">Local Goods</span>
+            <span class="logo-text" onclick="window.history.back()">Local Goods</span>
         </div>
         <div class="shop-page">
             <nav class="navbar">
@@ -137,10 +137,6 @@ $stmt->close();
                         <p>Change Password</p>
                         <span>></span>
                     </a>
-                    <a href="#" class="sub-menu-link">
-                        <p>Settings</p>
-                        <span>></span>
-                    </a>
                     <a href="#" onclick="showLogoutPopup()" class="sub-menu-link">
                         <p>Logout</p>
                         <span>></span>
@@ -150,7 +146,7 @@ $stmt->close();
             <div class="home-container">
                 <div id="home-page" class="home-page-content">
                     <div class="home-title title">
-                    <h1>Welcome <?php echo htmlspecialchars($user_name); ?></h1>
+                        <h1>Welcome <?php echo htmlspecialchars($user_name); ?></h1>
                     </div>
                     <div class="contents">
                         <h1>All Products</h1>
@@ -284,68 +280,70 @@ $stmt->close();
                         </div>
                     </div>
                 </div>
-                <div id="help-page" class="help">
 
-                    <header>
-                        <h1>Help Center</h1>
-                        <nav>
-                            <ul>
-                                <li><a href="#faqs">FAQs</a></li>
-                                <li><a href="#contact">Contact Us</a></li>
-                                <li><a href="#guides">Guides & Tutorials</a></li>
-                                <li><a href="#policies">Policies</a></li>
-                            </ul>
-                        </nav>
-                    </header>
+                <div id="help-page" class="help-page">
+                    <div class="help">
+                        <header>
+                            <h1>Help Center</h1>
+                            <nav>
+                                <ul>
+                                    <li><a href="#faqs">FAQs</a></li>
+                                    <li><a href="#contact">Contact Us</a></li>
+                                    <li><a href="#guides">Guides & Tutorials</a></li>
+                                    <li><a href="#policies">Policies</a></li>
+                                </ul>
+                            </nav>
+                        </header>
 
-                    <main>
-                        <section id="faqs">
-                            <h2>Frequently Asked Questions (FAQs)</h2>
-                            <div class="faq">
-                                <h3>Order Issues</h3>
-                                <p class="faq-content">To check your order, log in to your account and go to "My Orders". </p>
-                            </div>
-                            <div class="faq">
-                                <h3>Password Issues</h3>
-                                <p class="faq-content">To change your password, click the forgot password option at login page</p>
-                            </div>
+                        <main>
+                            <section id="faqs">
+                                <h2>Frequently Asked Questions (FAQs)</h2>
+                                <div class="faq">
+                                    <h3>Order Issues</h3>
+                                    <p class="faq-content">To check your order, log in to your account and go to "My Orders". </p>
+                                </div>
+                                <div class="faq">
+                                    <h3>Password Issues</h3>
+                                    <p class="faq-content">To change your password, click the forgot password option at login page</p>
+                                </div>
 
-                        </section>
+                            </section>
 
-                        <section id="contact">
-                            <h2>Contact Us</h2>
-                            <p><strong>Customer Support:</strong> Reach out to us at <a href="mailto:support@example.com">support@example.com</a> or call us at 1-800-123-4567.</p>
-                            <p><strong>Support Hours:</strong> Monday to Friday, 9 AM - 6 PM (EST).</p>
-                            <p><strong>Feedback:</strong> We value your feedback. Share your thoughts <a href="#" id="gocontact">here</a>.</p>
-                        </section>
+                            <section id="contact">
+                                <h2>Contact Us</h2>
+                                <p><strong>Customer Support:</strong> Reach out to us at <a href="mailto:support@example.com">support@example.com</a> or call us at 1-800-123-4567.</p>
+                                <p><strong>Support Hours:</strong> Monday to Friday, 9 AM - 6 PM (EST).</p>
+                                <p><strong>Feedback:</strong> We value your feedback. Share your thoughts <a href="#" id="gocontact">here</a>.</p>
+                            </section>
 
-                        <section id="guides">
-                            <h2>Guides and Tutorials</h2>
-                            <ul>
-                                <li><a href="#">Placing an Order</a></li>
-                                <li><a href="#">Using Discount Codes</a></li>
-                                <li><a href="#">Canceling Your Order</a></li>
-                            </ul>
-                        </section>
+                            <section id="guides">
+                                <h2>Guides and Tutorials</h2>
+                                <ul>
+                                    <li><a href="#">Placing an Order</a></li>
+                                    <li><a href="#">Using Discount Codes</a></li>
+                                    <li><a href="#">Canceling Your Order</a></li>
+                                </ul>
+                            </section>
 
-                        <section id="policies">
-                            <h2>Policies and Legal Information</h2>
-                            <ul>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Terms and Conditions</a></li>
-                                <li><a href="#">Cookie Policy</a></li>
-                            </ul>
-                        </section>
+                            <section id="policies">
+                                <h2>Policies and Legal Information</h2>
+                                <ul>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                    <li><a href="#">Terms and Conditions</a></li>
+                                    <li><a href="#">Cookie Policy</a></li>
+                                </ul>
+                            </section>
 
 
-                    </main>
+                        </main>
 
-                    <footer>
-                        <p>&copy; 2024 Your Company. All rights reserved.</p>
-                    </footer>
+                        <footer>
+                            <p>&copy; 2024 Your Company. All rights reserved.</p>
+                        </footer>
+                    </div>
                 </div>
-                <div class="contact" id="contact-page">
-                    <section id="contact">
+                <div class="contact-page" id="contact-page">
+                    <section class="contact" id="contact">
                         <h2>Contact Us</h2>
                         <form action="submit_form.php" method="post" class="contact-form">
                             <div class="form-group">
@@ -371,10 +369,7 @@ $stmt->close();
 
             </div>
         </div>
-        <!-- Settings -->
-        <div class="settings" id="setting">
-            
-        </div>
+
         <!-- Popups -->
         <div id="logout-popup" class="popup">
             <div class="popup-content">
@@ -392,6 +387,7 @@ $stmt->close();
             <div class="popup-content">
                 <p>Are you sure you want to delete your account?</p>
                 <form class="delete-form" action="deleteaccount.php" method="post">
+                    <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
                     <button class="btn btn-danger" type="submit">Delete</button>
                     <button class="btn btn-secondary btn-danger" type="button" onclick="hideDeletePopup()">Cancel</button>
                 </form>
